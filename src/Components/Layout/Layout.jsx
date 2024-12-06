@@ -1,23 +1,28 @@
-import React from "react";
-import { fetchMovies } from "../../Store/action";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { fetchMoviesRequest } from "../../Store/actions";
 
-function Layout() {
+const Layout = () => {
   const dispatch = useDispatch();
-  const fetchedMovies = useSelector((state) => state.fetchMoviesReducer.movies); // Fix the selector
+
+  const { movies, loading, error } = useSelector((state) => state.fetchMovies);
+
+  useEffect(() => {
+    dispatch(fetchMoviesRequest("popular"));
+  }, [dispatch]);
 
   return (
     <div>
-      <button onClick={() => dispatch(fetchMovies(["Movie 1", "Movie 2"]))}>
-        test
-      </button>
+      <h1>Movies</h1>
+      {loading && <p>Loading...</p>}
+      {error && <p>Error: {error}</p>}
       <ul>
-        {fetchedMovies.map((movie, index) => (
-          <li key={index}>{movie}</li>
+        {movies.map((movie) => (
+          <li key={movie.id}>{movie.title}</li>
         ))}
       </ul>
     </div>
   );
-}
+};
 
 export default Layout;
