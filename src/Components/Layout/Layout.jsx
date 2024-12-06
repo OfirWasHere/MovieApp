@@ -1,24 +1,19 @@
 import React from "react";
+import { fetchMovies } from "../../Store/action";
 import { useDispatch, useSelector } from "react-redux";
 
 function Layout() {
   const dispatch = useDispatch();
-  const { data, loading, error } = useSelector((state) => state.example);
-
-  const fetchData = () => {
-    dispatch({ type: "FETCH_DATA_REQUEST" });
-  };
+  const fetchedMovies = useSelector((state) => state.fetchMoviesReducer.movies); // Fix the selector
 
   return (
     <div>
-      <h1>Redux-Saga Example</h1>
-      <button onClick={fetchData} disabled={loading}>
-        {loading ? "Loading..." : "Fetch Data"}
+      <button onClick={() => dispatch(fetchMovies(["Movie 1", "Movie 2"]))}>
+        test
       </button>
-      {error && <p style={{ color: "red" }}>{error}</p>}
       <ul>
-        {data.map((item) => (
-          <li key={item.id}>{item.title}</li>
+        {fetchedMovies.map((movie, index) => (
+          <li key={index}>{movie}</li>
         ))}
       </ul>
     </div>
